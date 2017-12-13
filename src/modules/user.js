@@ -65,14 +65,13 @@ export const startWS = () => {
 
 export const postWS = () => {
   return (dispatch) => {
-    io.socket.put('/user/1', { name: 'Timmy Mendez' }, function (resData, jwRes) {
+    io.socket.patch('/user/1', { name: 'Timmy Mendez' }, function (resData, jwRes) {
       dispatch(getUser(resData));
     });
   }
 }
 
 export const getUser = (user) => {
-  console.log(user);
   return dispatch => {
     dispatch({
       type: FETCH_USER,

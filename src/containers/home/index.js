@@ -1,44 +1,44 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { push } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {
-  increment,
-  incrementAsync,
-  decrement,
-  decrementAsync
-} from '../../modules/counter'
+  startWS,
+  postWS
+} from '../../modules/user'
 
-const Home = props => (
-  <div>
-    <h1>Home</h1>
-    <p>Count: {props.count}</p>
 
-    <p>
-      <button onClick={props.increment} disabled={props.isIncrementing}>Increment</button>
-      <button onClick={props.incrementAsync} disabled={props.isIncrementing}>Increment Async</button>
-    </p>
+class Home extends Component {
+  componentDidMount() {
+    console.log('mounted');
+    this.props.startWS();
+  }
 
-    <p>
-      <button onClick={props.decrement} disabled={props.isDecrementing}>Decrement</button>
-      <button onClick={props.decrementAsync} disabled={props.isDecrementing}>Decrement Async</button>
-    </p>
+  renderUsers() {
+    const { users } = this.props;
 
-    <p><button onClick={() => props.changePage()}>Go to about page via redux</button></p>
-  </div>
-)
+    return users.map(user => <li key={user.id}>{user.name}</li>)
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div>Hi</div>
+        <button onClick={this.props.postWS}>Click me</button>
+      </div>
+    );
+  }
+}
+
+
 
 const mapStateToProps = state => ({
-  count: state.counter.count,
-  isIncrementing: state.counter.isIncrementing,
-  isDecrementing: state.counter.isDecrementing
+  user: state.user.user
 })
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  increment,
-  incrementAsync,
-  decrement,
-  decrementAsync,
+  postWS,
+  startWS,
   changePage: () => push('/about-us')
 }, dispatch)
 

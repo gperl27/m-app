@@ -34,7 +34,7 @@ class DashboardContainer extends Component {
                                 <Calendar />
                                 <NotesContainer />
                             </div>
-                            <div className="col-4">
+                            <div className="col-lg-4 col-md">
                                 <TodosContainer />
                             </div>
                         </div>

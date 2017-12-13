@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { RingLoader } from 'react-spinners';
 import {
     startWS,
     loadingUser,
@@ -17,15 +18,25 @@ class DashboardContainer extends Component {
     render() {
         console.log(this.props, 'PROPS');
 
-        if (this.props.loading || this.props.loading === null) {
-            return <div>hey</div>
-        }
+        // if (this.props.loading || this.props.loading === null) {
+        //     return <RingLoader
+        //         color={'#123abc'}
+        //         loading={this.props.loading}
+        //     />
+        // }
 
         return (
-            <div>
-                <div className="container">
-                    <h1>Welcome {this.props.user.name}!</h1>
-                </div>
+            <div className="container">
+                {this.props.loading || this.props.loading === null ?
+                    <RingLoader
+                        color={'#123abc'}
+                        loading={this.props.loading}
+                    />
+                    :
+                    <div>
+                        <h1>Welcome {this.props.user.name}!</h1>
+                    </div>
+                }
             </div>
         );
     }

@@ -14,9 +14,11 @@ io.sails.url = 'http://localhost:1337';
 export const FETCH_USER = 'FETCH_USER';
 export const LOADING_USER = 'LOADING_USER';
 export const LOADED_USER = 'LOADED_USER';
+export const SELECT_DATE = 'SELECT_DATE';
 
 const initialState = {
   user: null,
+  selectedDate: null,
   loading: null
 }
 
@@ -42,8 +44,22 @@ export default (state = initialState, action) => {
       }
     }
 
+    case SELECT_DATE: {
+      return {
+        ...state,
+        selectedDate: action.payload
+      }
+    }
+
     default:
       return state
+  }
+}
+
+export const selectDate = (date) => {
+  return {
+    type: SELECT_DATE,
+    payload: date
   }
 }
 
@@ -63,10 +79,33 @@ export const startWS = () => {
 }
 
 
-export const postWS = () => {
+export const postWS = (data) => {
   return (dispatch) => {
-    io.socket.patch('/user/1', { name: 'Timmy Mendez' }, function (resData, jwRes) {
+    io.socket.patch('/user/1', data, function (resData, jwRes) {
       dispatch(getUser(resData));
+    });
+  }
+}
+
+export const updateUserEvent = (id, data) => {
+  return (dispatch) => {
+    io.socket.patch(`/event/${id}`, data, function (resData, jwRes) {
+      io.socket.get('/user/1', function (resData, jwres) {
+        console.log(resData, 'fetch');
+        dispatch(getUser(resData));
+      });
+    });
+  }
+}
+
+export const newUserEvent = (data) => {
+  return (dispatch) => {
+    io.socket.post(`/event`, data, function (resData, jwRes) {
+      console.log(resData, 'CREATED EVENT');
+      io.socket.get('/user/1', function (resData, jwres) {
+        console.log(resData, 'user with NEW EVENT');
+        dispatch(getUser(resData));
+      });
     });
   }
 }

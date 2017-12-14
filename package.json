@@ -10,8 +10,10 @@
     "jquery": "^3.2.1",
     "moment": "^2.19.4",
     "popper.js": "^1.12.9",
+    "rc-time-picker": "^3.2.1",
     "react": "^16.2.0",
     "react-big-calendar": "^0.17.0",
+    "react-bootstrap-sweetalert": "^4.1.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
@@ -25,7 +27,9 @@
     "redux-thunk": "^2.2.0",
     "sails.io.js": "^1.1.13",
     "socket.io": "^2.0.4",
-    "socket.io-client": "^2.0.4"
+    "socket.io-client": "^2.0.4",
+    "sweetalert-react": "^0.4.11",
+    "timepicker": "^1.11.12"
   },
   "scripts": {
     "start": "react-scripts start",

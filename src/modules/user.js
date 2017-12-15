@@ -110,6 +110,16 @@ export const newUserEvent = (data) => {
   }
 }
 
+export const updateTodolist = (id, data) => {
+  return (dispatch) => {
+    io.socket.patch(`/todolist/${id}`, data, function (resData, jwRes) {
+      io.socket.get('/user/1', function (resData, jwres) {
+        dispatch(getUser(resData));
+      });
+    });
+  }
+}
+
 export const getUser = (user) => {
   return dispatch => {
     dispatch({

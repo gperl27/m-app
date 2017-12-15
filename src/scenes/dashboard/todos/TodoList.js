@@ -4,9 +4,26 @@ import _ from 'lodash'
 
 import Todo from './Todo';
 
+const styles = {
+    container: {
+        marginTop: '20px',
+        position: 'relative'
+    },
+    deleteBtn: {
+        position: 'absolute',
+        top: '5px',
+        right: '5px',
+        fontSize: '14px'
+    },
+    addBtn: {
+        marginTop: '10px',
+        fontSize: '12px',
+    },
+}
 
-const TodoList = ({ todolist, handleTitleChange, handleTodoChange, handleToggleComplete }) => (
-    <div className="card">
+
+const TodoList = ({ todolist, handleTitleChange, handleTodoChange, handleToggleComplete, deleteList, addNewTodo }) => (
+    <div style={styles.container} className="card">
         <div className="card-body">
             <h4 className="card-title">
                 <RIEInput
@@ -27,7 +44,8 @@ const TodoList = ({ todolist, handleTitleChange, handleTodoChange, handleToggleC
                     />
                 })}
             </ul>
-            <button type="button" className="btn btn-outline-danger">Delete</button>
+            <button onClick={() => addNewTodo(todolist)} style={styles.addBtn} className="btn btn-outline-success">New Task</button>
+            <button onClick={() => deleteList(todolist.id)} style={styles.deleteBtn} type="button" className="btn btn-danger">X</button>
         </div>
     </div>
 );

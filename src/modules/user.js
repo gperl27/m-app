@@ -120,6 +120,26 @@ export const updateTodolist = (id, data) => {
   }
 }
 
+export const createNewList = (data) => {
+  return (dispatch) => {
+    io.socket.post(`/todolist`, data, function (resData, jwRes) {
+      io.socket.get('/user/1', function (resData, jwres) {
+        dispatch(getUser(resData));
+      });
+    });
+  }
+}
+
+export const deleteList = (id) => {
+  return (dispatch) => {
+    io.socket.delete(`/todolist/${id}`, function (resData, jwRes) {
+      io.socket.get('/user/1', function (resData, jwres) {
+        dispatch(getUser(resData));
+      });
+    });
+  }
+}
+
 export const getUser = (user) => {
   return dispatch => {
     dispatch({

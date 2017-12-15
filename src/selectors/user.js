@@ -1,20 +1,18 @@
 import { createSelector } from 'reselect'
 import moment from 'moment';
 
-const user = state => state.user.user
+// const user = state => state.user.user
+const todolists = state => state.user.user.todolists
 const selectedDate = state => state.user.selectedDate
 
-export const userFilteredByDateSelector = createSelector(
-    user,
+export const todosFilteredByDateSelector = createSelector(
+    todolists,
     selectedDate,
-    (user, selectedDate) => {
+    (todolists, selectedDate) => {
         const formattedDate = selectedDate ? moment(selectedDate).format('MM-DD-YYYY') : moment().format('MM-DD-YYYY')
 
-        const filteredTodolists = user.todolists.filter(todolist => {
+        return todolists.filter(todolist => {
            return moment(todolist.date).format('MM-DD-YYYY') === formattedDate
         })
-
-        user.todolists = filteredTodolists
-        return user;
     }
 )

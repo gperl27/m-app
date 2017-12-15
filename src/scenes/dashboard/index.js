@@ -11,6 +11,13 @@ import NotesContainer from './notes'
 import TodosContainer from './todos'
 
 
+const styles = {
+    header: {
+        marginTop: '25px',
+        marginBottom: '50px',
+    }
+}
+
 class DashboardContainer extends Component {
     componentDidMount() {
         const { startWS, loadingUser } = this.props;
@@ -28,7 +35,7 @@ class DashboardContainer extends Component {
                     />
                     :
                     <div>
-                        <h1>Welcome {this.props.user.name}!</h1>
+                        <h1 style={styles.header} >Welcome {this.props.user.name}!</h1>
                         <div className="row">
                             <div className="col">
                                 <Calendar />

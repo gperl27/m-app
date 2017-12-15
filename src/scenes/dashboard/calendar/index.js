@@ -33,7 +33,9 @@ class Calendar extends Component {
         showEditSwal: false,
         editEventId: null,
         editStartTimeChoice: null,
-        editEndTimeChoice: null
+        editEndTimeChoice: null,
+        editTitle: '',
+        newTitle: '',
     }
 
     handleTimeChange(value, key) {
@@ -56,9 +58,10 @@ class Calendar extends Component {
     }
 
     handleSelectEvent(event) {
-        const { start, end, id } = event;
+        const { start, end, id, title } = event;
         this.props.selectDate(start);
         this.setState({
+            editTitle: title,
             editStartTimeChoice: start,
             editEndTimeChoice: end,
             editEventId: id,
@@ -67,9 +70,10 @@ class Calendar extends Component {
     }
 
     handleUpdateEventTime() {
-        const { editStartTimeChoice, editEndTimeChoice, editEventId } = this.state;
+        const { editStartTimeChoice, editEndTimeChoice, editEventId, editTitle } = this.state;
 
         const data = {
+            description: editTitle,
             start: formatDate(this.props.selectedDate, editStartTimeChoice),
             end: formatDate(this.props.selectedDate, editEndTimeChoice),
         }
@@ -88,20 +92,25 @@ class Calendar extends Component {
     }
 
     handleNewEvent() {
-        const { startTimeChoice, endTimeChoice } = this.state;
+        const { startTimeChoice, endTimeChoice, newTitle } = this.state;
 
         const data = {
             owner: 1,
-            description: 'New Event',
+            description: newTitle || 'New Event',
             start: formatDate(this.props.selectedDate, startTimeChoice),
             end: formatDate(this.props.selectedDate, endTimeChoice),
         }
 
-        console.log(data);
-
         this.props.newUserEvent(data);
 
-        this.setState({ showSwal: false });
+        this.setState({ showSwal: false, newTitle: '' });
+    }
+
+    handleInputChange(e, key) {
+        let data = {};
+        data[key] = e.target.value;
+
+        this.setState(data);
     }
 
     render() {
@@ -119,10 +128,24 @@ class Calendar extends Component {
                     onSelectSlot={e => this.handleSlotEvent(e)}
                 />
                 <SweetAlert
+                    showCancel
+                    cancelBtnBsStyle="danger"
                     show={this.state.showEditSwal}
                     title="Edit an event"
                     onConfirm={this.handleUpdateEventTime.bind(this)}
+                    onCancel={() => this.setState({ showEditSwal: false })}
                 >
+                    <hr />
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-describedby="event title"
+                            placeholder="Enter a title for this event..."
+                            value={this.state.editTitle}
+                            onChange={(e) => this.handleInputChange(e, 'editTitle')}
+                        />
+                    </div>
                     <div className="row">
                         <div className="col">
                             <h4>Start</h4>
@@ -149,10 +172,24 @@ class Calendar extends Component {
                     </div>
                 </SweetAlert>
                 <SweetAlert
+                    showCancel
+                    cancelBtnBsStyle="danger"
                     show={this.state.showSwal}
                     title="Schedule an event"
                     onConfirm={this.handleNewEvent.bind(this)}
+                    onCancel={() => this.setState({ showSwal: false })}
                 >
+                    <hr />
+                    <div className="form-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            aria-describedby="event title"
+                            placeholder="Enter a title for this event..."
+                            value={this.state.newTitle}
+                            onChange={(e) => this.handleInputChange(e, 'newTitle')}
+                        />
+                    </div>
                     <div className="row">
                         <div className="col">
                             <h4>Start</h4>

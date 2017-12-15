@@ -18,6 +18,7 @@ export const SELECT_DATE = 'SELECT_DATE';
 
 const initialState = {
   user: null,
+  filteredUser: null,
   selectedDate: null,
   loading: null
 }

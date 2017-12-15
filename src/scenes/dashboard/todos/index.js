@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { userFilteredByDateSelector } from '../../../selectors/user';
+import { todosFilteredByDateSelector } from '../../../selectors/user';
 import {
     updateTodolist,
     createNewList,
@@ -11,7 +11,7 @@ import TodoList from './TodoList';
 
 class TodosContainer extends Component {
     renderTodoLists() {
-        return this.props.user.todolists.map(todolist => {
+        return this.props.todolists.map(todolist => {
             return <TodoList
                 key={todolist.id}
                 todolist={todolist}
@@ -91,6 +91,8 @@ class TodosContainer extends Component {
     }
 
     render() {
+        console.log(this.props.selectedDate, 'selected date');
+
         return (
             <div>
                 <button onClick={this.addNewList.bind(this)} type="button" className="btn btn-outline-success">New List</button>
@@ -101,7 +103,8 @@ class TodosContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: userFilteredByDateSelector(state),
+    user: state.user.user,
+    todolists: todosFilteredByDateSelector(state),
     selectedDate: state.user.selectedDate,
 })
 

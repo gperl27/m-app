@@ -75,6 +75,11 @@ export const startWS = () => {
       console.log(resData, 'fetch');
       dispatch(getUser(resData));
     });
+
+    // io.socket.post('/user/1/selectedDate', { selectedDate: new Date()}, function (resData, jwres) {
+    //   console.log(resData, 'selected date');
+    //   dispatch(getUser(resData));
+    // });
   }
 }
 

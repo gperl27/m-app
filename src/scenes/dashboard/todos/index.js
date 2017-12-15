@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { userFilteredByDateSelector } from '../../../selectors/user';
 import {
     updateTodolist,
     createNewList,
@@ -100,7 +101,7 @@ class TodosContainer extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user.user,
+    user: userFilteredByDateSelector(state),
     selectedDate: state.user.selectedDate,
 })
 

@@ -56,6 +56,12 @@ export default (state = initialState, action) => {
   }
 }
 
+const fetchUser = (dispatch) => {
+  io.socket.get('/user/1', function (resData, jwres) {
+    dispatch(getUser(resData));
+  });
+}
+
 export const selectDate = (date) => {
   return {
     type: SELECT_DATE,
@@ -68,13 +74,11 @@ export const startWS = () => {
   return (dispatch) => {
     // Add a connect listener
     io.socket.on('user', (msg) => {
-      console.log(msg);
+      console.log(msg, 'SOCKET UPDATE');
+      fetchUser(dispatch);
     })
 
-    io.socket.get('/user/1', function (resData, jwres) {
-      console.log(resData, 'fetch');
-      dispatch(getUser(resData));
-    });
+    fetchUser(dispatch);
 
     // io.socket.post('/user/1/selectedDate', { selectedDate: new Date()}, function (resData, jwres) {
     //   console.log(resData, 'selected date');
@@ -95,10 +99,7 @@ export const postWS = (data) => {
 export const updateUserEvent = (id, data) => {
   return (dispatch) => {
     io.socket.patch(`/event/${id}`, data, function (resData, jwRes) {
-      io.socket.get('/user/1', function (resData, jwres) {
-        console.log(resData, 'fetch');
-        dispatch(getUser(resData));
-      });
+      fetchUser(dispatch);
     });
   }
 }
@@ -106,11 +107,7 @@ export const updateUserEvent = (id, data) => {
 export const newUserEvent = (data) => {
   return (dispatch) => {
     io.socket.post(`/event`, data, function (resData, jwRes) {
-      console.log(resData, 'CREATED EVENT');
-      io.socket.get('/user/1', function (resData, jwres) {
-        console.log(resData, 'user with NEW EVENT');
-        dispatch(getUser(resData));
-      });
+      fetchUser(dispatch);
     });
   }
 }
@@ -118,9 +115,7 @@ export const newUserEvent = (data) => {
 export const updateTodolist = (id, data) => {
   return (dispatch) => {
     io.socket.patch(`/todolist/${id}`, data, function (resData, jwRes) {
-      io.socket.get('/user/1', function (resData, jwres) {
-        dispatch(getUser(resData));
-      });
+      fetchUser(dispatch);
     });
   }
 }
@@ -128,9 +123,7 @@ export const updateTodolist = (id, data) => {
 export const createNewList = (data) => {
   return (dispatch) => {
     io.socket.post(`/todolist`, data, function (resData, jwRes) {
-      io.socket.get('/user/1', function (resData, jwres) {
-        dispatch(getUser(resData));
-      });
+      fetchUser(dispatch);
     });
   }
 }
@@ -138,9 +131,7 @@ export const createNewList = (data) => {
 export const deleteList = (id) => {
   return (dispatch) => {
     io.socket.delete(`/todolist/${id}`, function (resData, jwRes) {
-      io.socket.get('/user/1', function (resData, jwres) {
-        dispatch(getUser(resData));
-      });
+      fetchUser(dispatch);
     });
   }
 }

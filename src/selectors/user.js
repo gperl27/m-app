@@ -13,7 +13,7 @@ export const userFilteredByDateSelector = createSelector(
         const filteredTodolists = user.todolists.filter(todolist => {
            return moment(todolist.date).format('MM-DD-YYYY') === formattedDate
         })
-        console.log(filteredTodolists, 'filteredtodolists');
+
         user.todolists = filteredTodolists
         return user;
     }

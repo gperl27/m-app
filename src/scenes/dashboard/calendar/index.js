@@ -37,8 +37,6 @@ class Calendar extends Component {
     }
 
     handleTimeChange(value, key) {
-        const k = this.state[key]
-
         let newState = {}
         newState[key] = value
 

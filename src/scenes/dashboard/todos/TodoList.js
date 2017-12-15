@@ -5,7 +5,7 @@ import _ from 'lodash'
 import Todo from './Todo';
 
 
-const TodoList = ({ todolist, handleTitleChange, handleTodoChange }) => (
+const TodoList = ({ todolist, handleTitleChange, handleTodoChange, handleToggleComplete }) => (
     <div className="card">
         <div className="card-body">
             <h4 className="card-title">
@@ -23,6 +23,7 @@ const TodoList = ({ todolist, handleTitleChange, handleTodoChange }) => (
                         todo={todo}
                         todolist={todolist}
                         handleTodoChange={handleTodoChange}
+                        handleToggleComplete={handleToggleComplete}
                     />
                 })}
             </ul>

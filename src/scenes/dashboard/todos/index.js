@@ -14,6 +14,7 @@ class TodosContainer extends Component {
                 todolist={todolist}
                 handleTitleChange={this.handleTitleChange.bind(this)}
                 handleTodoChange={this.handleTodoChange.bind(this)}
+                handleToggleComplete={this.handleToggleComplete.bind(this)}
             />
         })
     }
@@ -29,6 +30,18 @@ class TodosContainer extends Component {
         let currentTodo = tempTodos[index];
 
         currentTodo.text = e.text;
+        tempTodos.splice(index, 1, currentTodo);
+
+        const data = { todos: tempTodos }
+        
+        this.props.updateTodolist(todolist.id, data);
+    }
+
+    handleToggleComplete(e, index, todolist) {
+        const tempTodos = todolist.todos
+        let currentTodo = tempTodos[index];
+
+        currentTodo.completed = !currentTodo.completed;
         tempTodos.splice(index, 1, currentTodo);
 
         const data = { todos: tempTodos }

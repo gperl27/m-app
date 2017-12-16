@@ -11,7 +11,9 @@ import {
     updateUserEvent,
     newUserEvent,
     selectDate,
-} from '../../../modules/user'
+    deleteEvent
+} from '../../../modules/user';
+import Phrases from '../../../misc/catchphrases';
 
 
 BigCalendar.setLocalizer(
@@ -25,6 +27,18 @@ const formatDate = (selectedDate, dateToExtractTimeFrom) => {
     return moment(`${date} ${time}`, "MM-DD-YYYY h:mm a");
 }
 
+const getRandomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+const styles = {
+    deleteEventBtn: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px'
+    }
+}
+
 class Calendar extends Component {
     state = {
         showSwal: false,
@@ -36,6 +50,10 @@ class Calendar extends Component {
         editEndTimeChoice: null,
         editTitle: '',
         newTitle: '',
+        showGreetingSwal: false,
+        randomImg: '',
+        randomPhrase: '',
+        firstTime: true,
     }
 
     handleTimeChange(value, key) {
@@ -60,13 +78,18 @@ class Calendar extends Component {
     handleSelectEvent(event) {
         const { start, end, id, title } = event;
         this.props.selectDate(start);
-        this.setState({
-            editTitle: title,
-            editStartTimeChoice: start,
-            editEndTimeChoice: end,
-            editEventId: id,
-            showEditSwal: true
-        })
+
+        if (this.state.firstTime) {
+            this.showGreeting();
+        } else {
+            this.setState({
+                editTitle: title,
+                editStartTimeChoice: start,
+                editEndTimeChoice: end,
+                editEventId: id,
+                showEditSwal: true
+            })
+        }
     }
 
     handleUpdateEventTime() {
@@ -86,9 +109,14 @@ class Calendar extends Component {
     handleSlotEvent(event) {
         this.props.selectDate(moment(event.start));
 
-        this.setState({
-            showSwal: true
-        })
+        if (this.state.firstTime) {
+            this.showGreeting();
+        } else {
+            this.setState({
+                showSwal: true
+            })
+        }
+
     }
 
     handleNewEvent() {
@@ -111,6 +139,23 @@ class Calendar extends Component {
         data[key] = e.target.value;
 
         this.setState(data);
+    }
+
+    showGreeting() {
+        const randomImageIndex = getRandomInt(1, 22);
+        const randomPhraseIndex = getRandomInt(0, Phrases.phrases.length - 1);
+
+        this.setState({
+            showGreetingSwal: true,
+            randomImg: `/images/img${randomImageIndex}.jpg`,
+            randomPhrase: Phrases.phrases[randomPhraseIndex],
+            firstTime: false,
+        })
+    }
+
+    deleteEvent() {
+        this.props.deleteEvent(this.state.editEventId);
+        this.setState({ showEditSwal: false })
     }
 
     render() {
@@ -169,6 +214,7 @@ class Calendar extends Component {
                                 value={this.state.editEndTimeChoice}
                             />
                         </div>
+                        <button style={styles.deleteEventBtn} onClick={this.deleteEvent.bind(this)} className="btn btn-danger">X</button>
                     </div>
                 </SweetAlert>
                 <SweetAlert
@@ -215,6 +261,17 @@ class Calendar extends Component {
                         </div>
                     </div>
                 </SweetAlert>
+                <SweetAlert
+                    show={this.state.showGreetingSwal}
+                    title="Before you down to business..."
+                    onConfirm={() => this.setState({ showGreetingSwal: false })}
+                >
+                    <hr />
+                    <div>
+                        <h2>{this.state.randomPhrase}</h2>
+                        <img style={{ height: 'auto', maxHeight: '400px', width: '400px' }} src={this.state.randomImg || '#'} alt="Greeting Image" />
+                    </div>
+                </SweetAlert>
             </div>
         );
     }
@@ -228,7 +285,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators({
     updateUserEvent,
     newUserEvent,
-    selectDate
+    deleteEvent,
+    selectDate,
 }, dispatch)
 
 export default connect(

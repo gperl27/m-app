@@ -137,6 +137,14 @@ export const deleteList = (id) => {
   }
 }
 
+export const deleteEvent = (id) => {
+  return (dispatch) => {
+    io.socket.delete(`/event/${id}`, function (resData, jwRes) {
+      fetchUser(dispatch);
+    });
+  }
+}
+
 export const getUser = (user) => {
   return dispatch => {
     dispatch({
